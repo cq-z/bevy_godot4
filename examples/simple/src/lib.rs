@@ -44,7 +44,7 @@ pub struct MyAssets {
 impl Default for MyAssets {
     fn default() -> Self {
         let mut resource_loader = ResourceLoader::singleton();
-        let sprite = ErasedGdResource::new(resource_loader.load("sprite.tscn".into()).unwrap());
+        let sprite = ErasedGdResource::new(resource_loader.load("sprite.tscn").unwrap());
 
         Self { sprite }
     }
