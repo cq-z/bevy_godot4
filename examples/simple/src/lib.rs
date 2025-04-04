@@ -1,3 +1,6 @@
+#[cfg(debug_assertions)]
+mod scripts;
+
 mod client_grpc;
 use godot::prelude::*;
 
@@ -27,29 +30,34 @@ use crate::client_grpc::{
     HelloReply,
     greeter_client::GreeterClient
 };
+struct Lib;
 
+#[gdextension]
+unsafe impl ExtensionLibrary for Lib {
+    fn on_level_init(level: InitLevel) {
+        match level {
+            InitLevel::Core => (),
+            InitLevel::Servers => (),
+            InitLevel::Scene => godot_rust_script::init!(scripts),
+            InitLevel::Editor => (),
+        }
+    }
+
+    fn on_level_deinit(level: InitLevel) {
+        match level {
+            InitLevel::Editor => (),
+            InitLevel::Scene => godot_rust_script::deinit!(),
+            InitLevel::Servers => (),
+            InitLevel::Core => (),
+        }
+    }
+}
 #[derive(Debug, Default, Clone, Eq, PartialEq, Hash, States)]
 enum GameState {
     #[default]
     Playing,
 }
 
-#[bevy_app]
-fn build_app(app: &mut App) {
-    godot_print!("Player ready!");
-    //perform_get_message_grpc();
-    app.add_plugins(StatesPlugin)
-        .init_state::<GameState>()
-        .init_resource::<MyAssets>()
-        .add_systems(OnEnter(GameState::Playing), spawn_sprite)
-        .add_systems(
-            Update,
-            move_sprite
-                .as_physics_system()
-                .run_if(in_state(GameState::Playing)),
-        );
-      
-}
 
 #[derive(Resource, Debug)]
 pub struct MyAssets {

@@ -21,5 +21,7 @@ godot = { version = "0.2.4", default-features = false, features = ["experimental
 tonic = { version="0.12.3", default-features = false, features=["prost","codegen"] }
 tonic-web-wasm-client = "0.6.2"
 prost = "0.13.5"
+godot-rust-script = { git  = "https://github.com/TitanNano/godot-rust-script.git", branch = "master" }
+
 [build-dependencies]
 tonic-build = { version="0.12.3", default-features = false, features = ["prost"]}
